@@ -109,7 +109,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate in (CAR.RAV4_TSS2, CAR.RAV4H_TSS2):
       stop_and_go = True
       ret.wheelbase = 2.68986
-      ret.steerRatio = 14.3
+      ret.steerRatio = 12.80
       tire_stiffness_factor = 0.7933
       ret.mass = 3585. * CV.LB_TO_KG + STD_CARGO_KG  # Average between ICE and Hybrid
       set_lat_tune(ret.lateralTuning, LatTunes.PID_D)
@@ -148,7 +148,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate == CAR.SIENNA:
       stop_and_go = True
       ret.wheelbase = 3.03
-      ret.steerRatio = 15.5
+      ret.steerRatio = 15
       tire_stiffness_factor = 0.444
       ret.mass = 4590. * CV.LB_TO_KG + STD_CARGO_KG
       set_lat_tune(ret.lateralTuning, LatTunes.PID_J)
@@ -229,10 +229,11 @@ class CarInterface(CarInterfaceBase):
     smartDsu = 0x2FF in fingerprint[0]
     # In TSS2 cars the camera does long control
     found_ecus = [fw.ecu for fw in car_fw]
-    ret.enableDsu = (len(found_ecus) > 0) and (Ecu.dsu not in found_ecus) and (candidate not in NO_DSU_CAR) and (not smartDsu)
+#** ret.enableDsu = (len(found_ecus) > 0) and (Ecu.dsu not in found_ecus) and (candidate not in NO_DSU_CAR) and (not smartDsu)
+    ret.enableDsu = False #** (len(found_ecus) > 0) and (Ecu.dsu not in found_ecus) and (candidate not in NO_DSU_CAR) and (not smartDsu)
     ret.enableGasInterceptor = 0x201 in fingerprint[0]
     # if the smartDSU is detected, openpilot can send ACC_CMD (and the smartDSU will block it from the DSU) or not (the DSU is "connected")
-    ret.openpilotLongitudinalControl = smartDsu or ret.enableDsu or candidate in TSS2_CAR
+    ret.openpilotLongitudinalControl = False #**smartDsu or ret.enableDsu or candidate in TSS2_CAR
 
     # min speed to enable ACC. if car can do stop and go, then set enabling speed
     # to a negative value, so it won't matter.
